@@ -1,0 +1,107 @@
+services:
+  prod-mongo:
+    image: mongo:7
+    container_name: cst-prod-mongo
+    restart: unless-stopped
+    ports:
+      - "27019:27017"
+    volumes:
+      - prod_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - cst-prod-net
+
+  prod-auth-service:
+    build:
+      context: ./backend/auth-service
+    image: cst/auth-service:prod
+    restart: always
+    environment:
+      PORT: 5001
+      JWT_SECRET: cst-prod-secret-change-this
+      MONGODB_URI: mongodb://prod-mongo:27017/cstAuthProd
+    depends_on:
+      prod-mongo:
+        condition: service_healthy
+    ports:
+      - "5201:5001"
+    networks:
+      cst-prod-net:
+        aliases:
+          - auth-service
+
+  prod-ticket-service:
+    build:
+      context: ./backend/ticket-service
+    image: cst/ticket-service:prod
+    restart: always
+    environment:
+      PORT: 5000
+      JWT_SECRET: cst-prod-secret-change-this
+      MONGODB_URI: mongodb://prod-mongo:27017/ticketDBProd
+    depends_on:
+      prod-mongo:
+        condition: service_healthy
+    ports:
+      - "5200:5000"
+    networks:
+      cst-prod-net:
+        aliases:
+          - ticket-service
+
+  prod-support-service:
+    build:
+      context: ./backend/support-service
+    image: cst/support-service:prod
+    restart: always
+    environment:
+      PORT: 5002
+    ports:
+      - "5202:5002"
+    networks:
+      cst-prod-net:
+        aliases:
+          - support-service
+
+  prod-notification-service:
+    build:
+      context: ./backend/notification-service
+    image: cst/notification-service:prod
+    restart: always
+    environment:
+      PORT: 5003
+      MONGODB_URI: mongodb://prod-mongo:27017/cstNotificationsProd
+    depends_on:
+      prod-mongo:
+        condition: service_healthy
+    ports:
+      - "5203:5003"
+    networks:
+      cst-prod-net:
+        aliases:
+          - notification-service
+
+  prod-frontend:
+    build:
+      context: ./frontend
+    image: cst/frontend:prod
+    restart: always
+    depends_on:
+      - prod-auth-service
+      - prod-ticket-service
+      - prod-support-service
+      - prod-notification-service
+    ports:
+      - "8082:80"
+    networks:
+      - cst-prod-net
+
+volumes:
+  prod_mongo_data:
+
+networks:
+  cst-prod-net:

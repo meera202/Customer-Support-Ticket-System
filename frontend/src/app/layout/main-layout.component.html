@@ -1,0 +1,83 @@
+<main class="layout" [class.collapsed]="collapsed()">
+  <aside class="sidebar" [class.collapsed]="collapsed()">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-detail">
+        <h2>Customer Support System</h2>
+        <p *ngIf="auth.user()">
+          Signed in as {{ auth.user()?.username }} ({{ auth.user()?.role }})
+        </p>
+      </div>
+    </div>
+
+    <nav *ngIf="auth.user()?.role === 'agent'">
+      <a
+        routerLink="/app/agent/dashboard"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="nav-ico">📊</span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      <a
+        routerLink="/app/agent/tickets"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="nav-ico">🎫</span>
+        <span class="nav-text">Tickets</span>
+      </a>
+      <a
+        routerLink="/app/agent/response"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="nav-ico">💬</span>
+        <span class="nav-text">Response &amp; notifications</span>
+      </a>
+    </nav>
+
+    <nav *ngIf="auth.user()?.role === 'customer'">
+      <a
+        routerLink="/app/customer/dashboard"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="nav-ico">📋</span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+      <a
+        routerLink="/app/customer/notifications"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="nav-ico">🔔</span>
+        <span class="nav-text">Notifications</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button type="button" class="collapse-btn secondary" (click)="toggleSidebar()">
+        {{ collapsed() ? 'Expand' : 'Collapse' }}
+      </button>
+      <button type="button" class="collapse-btn danger" (click)="logout()">
+        Log out
+      </button>
+    </div>
+  </aside>
+
+  <section class="content">
+    <header class="topbar">
+      <div>
+        <h1>{{ pageTitle() }}</h1>
+        <p>Customer Support System</p>
+      </div>
+      <div class="topbar-actions">
+        <input placeholder="Search..." />
+        <button type="button" class="ghost">Today</button>
+      </div>
+    </header>
+
+    <router-outlet />
+  </section>
+</main>

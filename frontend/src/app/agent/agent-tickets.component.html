@@ -1,0 +1,38 @@
+<section class="card">
+  <h2>Ticket Queue</h2>
+  <p class="message success" *ngIf="statusMessage">{{ statusMessage }}</p>
+  <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="ticket-list" *ngIf="tickets.length; else emptyState">
+    <article class="ticket-item" *ngFor="let ticket of tickets">
+      <div>
+        <h3>{{ ticket.title }}</h3>
+        <p>{{ ticket.description }}</p>
+        <small class="muted">
+          Priority: <strong>{{ ticket.priority }}</strong> |
+          Status: <strong>{{ ticket.status }}</strong>
+          <span *ngIf="ticket.assignedAgent">
+            | Agent: <strong>{{ ticket.assignedAgent }}</strong>
+          </span>
+          | Customer: <strong>{{ customerLabel(ticket) }}</strong>
+        </small>
+      </div>
+
+      <div class="actions">
+        <button type="button" (click)="updateStatus(ticket._id, 'in-progress')">
+          In progress
+        </button>
+        <button type="button" (click)="updateStatus(ticket._id, 'resolved')">
+          Resolved
+        </button>
+        <button type="button" class="danger" (click)="deleteTicket(ticket._id)">
+          Delete
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="muted">No tickets in the queue.</p>
+  </ng-template>
+</section>

@@ -1,0 +1,47 @@
+<section class="dashboard-grid">
+  <article class="card stat">
+    <h3>Total Tickets</h3>
+    <p>{{ totalTickets }}</p>
+  </article>
+  <article class="card stat">
+    <h3>Open / Active</h3>
+    <p>{{ openTickets }}</p>
+  </article>
+  <article class="card stat">
+    <h3>Resolved</h3>
+    <p>{{ resolvedTickets }}</p>
+  </article>
+  <article class="card stat">
+    <h3>Resolution Rate</h3>
+    <p>{{ resolutionRate }}</p>
+  </article>
+</section>
+
+<section class="analytics-grid">
+  <article class="card">
+    <h2>Ticket Analytics</h2>
+    <div class="mini-stats">
+      <div>
+        <span>Open</span>
+        <strong>{{ openTickets }}</strong>
+      </div>
+      <div>
+        <span>Resolved</span>
+        <strong>{{ resolvedTickets }}</strong>
+      </div>
+      <div>
+        <span>Total</span>
+        <strong>{{ totalTickets }}</strong>
+      </div>
+    </div>
+    <div class="line-placeholder"></div>
+  </article>
+
+  <article class="card target-card">
+    <h2>Resolution Target</h2>
+    <div class="target-ring">
+      <span>{{ resolutionRate }}</span>
+    </div>
+    <p class="muted">Based on resolved vs total tickets.</p>
+  </article>
+</section>

@@ -1,0 +1,21 @@
+h2 {
+  margin: 0 0 0.5rem;
+}
+
+h3 {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.edit-grid {
+  display: grid;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+textarea {
+  padding: 0.56rem 0.74rem;
+  border-radius: 9px;
+  border: 1px solid #cbd5e1;
+  font-family: inherit;
+}

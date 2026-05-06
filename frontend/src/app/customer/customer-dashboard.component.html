@@ -1,0 +1,89 @@
+<section class="card">
+  <h2>Your tickets</h2>
+  <p class="muted">
+    Status and assignment are managed by support agents. You can create, edit, or
+    delete your requests.
+  </p>
+  <p class="message success" *ngIf="statusMessage">{{ statusMessage }}</p>
+  <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <h3>New ticket</h3>
+  <div class="form-row">
+    <input [(ngModel)]="newTicket.title" placeholder="Title" name="newTitle" />
+    <input
+      [(ngModel)]="newTicket.description"
+      placeholder="Description"
+      name="newDesc"
+    />
+    <select [(ngModel)]="newTicket.priority" name="newPri">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+    <button type="button" (click)="createTicket()" [disabled]="creating">
+      {{ creating ? 'Creating…' : 'Create' }}
+    </button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>History</h2>
+  <p class="muted" *ngIf="loading">Loading latest tickets...</p>
+  <div class="ticket-list" *ngIf="tickets.length; else emptyState">
+    <article class="ticket-item" *ngFor="let ticket of tickets">
+      <div *ngIf="editingId !== ticket._id; else editBlock">
+        <h3>{{ ticket.title }}</h3>
+        <p>{{ ticket.description }}</p>
+        <small class="muted">
+          Your priority: <strong>{{ ticket.priority }}</strong> |
+          Agent status: <strong>{{ ticket.status }}</strong>
+          <span *ngIf="ticket.assignedAgent">
+            | Assigned: <strong>{{ ticket.assignedAgent }}</strong>
+          </span>
+        </small>
+      </div>
+      <ng-template #editBlock>
+        <div class="edit-grid">
+          <input [(ngModel)]="editDraft.title" name="title{{ ticket._id }}" />
+          <textarea
+            [(ngModel)]="editDraft.description"
+            name="desc{{ ticket._id }}"
+            rows="3"
+          ></textarea>
+          <select [(ngModel)]="editDraft.priority" name="pri{{ ticket._id }}">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+      </ng-template>
+
+      <div class="actions">
+        <ng-container *ngIf="editingId !== ticket._id">
+          <button type="button" class="secondary" (click)="startEdit(ticket)">
+            Edit
+          </button>
+          <button
+            type="button"
+            class="danger"
+            (click)="deleteTicket(ticket._id)"
+            [disabled]="deletingId === ticket._id"
+          >
+            {{ deletingId === ticket._id ? 'Deleting…' : 'Delete' }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="editingId === ticket._id">
+          <button type="button" (click)="saveEdit()" [disabled]="saving">
+            {{ saving ? 'Saving…' : 'Save' }}
+          </button>
+          <button type="button" class="secondary" (click)="cancelEdit()">
+            Cancel
+          </button>
+        </ng-container>
+      </div>
+    </article>
+  </div>
+  <ng-template #emptyState>
+    <p class="muted">You have not submitted any tickets yet.</p>
+  </ng-template>
+</section>

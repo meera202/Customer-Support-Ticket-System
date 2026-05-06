@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support-service
+  namespace: cst
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: support-service
+  template:
+    metadata:
+      labels:
+        app: support-service
+    spec:
+      containers:
+        - name: support-service
+          image: cst/support-service:prod
+          ports:
+            - containerPort: 5002
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: cst-config
+                  key: SUPPORT_PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: support-service
+  namespace: cst
+spec:
+  selector:
+    app: support-service
+  ports:
+    - port: 5002
+      targetPort: 5002

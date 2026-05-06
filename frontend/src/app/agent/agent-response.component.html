@@ -1,0 +1,49 @@
+<section class="card">
+  <h2>Response &amp; notification actions</h2>
+  <p class="message success" *ngIf="statusMessage">{{ statusMessage }}</p>
+  <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="form-row">
+    <select [(ngModel)]="selectedTicketId">
+      <option value="">Select ticket</option>
+      <option *ngFor="let ticket of tickets" [value]="ticket._id">
+        {{ ticket.title }} ({{ ticket.status }})
+      </option>
+    </select>
+  </div>
+
+  <h3>Assign agent</h3>
+  <div class="form-row">
+    <input
+      [(ngModel)]="assignment.agentName"
+      placeholder="Agent name"
+      name="agentName"
+    />
+    <button type="button" (click)="assignTicket()">Assign</button>
+  </div>
+
+  <h3>Support response</h3>
+  <p class="muted small">
+    Sending a response also saves a customer notification when the ticket has a customer.
+    Example subject: Message from support - sign issue
+  </p>
+  <div class="form-row">
+    <input
+      [(ngModel)]="response.text"
+      placeholder="Response to log with support service"
+      name="responseText"
+    />
+    <button type="button" (click)="sendResponse()">Send response</button>
+  </div>
+
+  <h3>Customer notification (stored)</h3>
+  <div class="form-row stack">
+    <textarea
+      rows="3"
+      [(ngModel)]="notificationText"
+      placeholder="Email-style message to the customer (optional if you sent a response above)"
+      name="notificationText"
+    ></textarea>
+    <button type="button" (click)="notifyCustomer()">Save notification</button>
+  </div>
+</section>

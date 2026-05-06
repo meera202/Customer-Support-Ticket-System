@@ -1,0 +1,37 @@
+<div class="auth-shell">
+  <div class="auth-card">
+    <h1>Create account</h1>
+    <p class="muted">Choose role: Customer or Agent</p>
+
+    <label>
+      Username
+      <input [(ngModel)]="username" name="username" autocomplete="username" />
+    </label>
+    <label>
+      Password
+      <input
+        [(ngModel)]="password"
+        name="password"
+        type="password"
+        autocomplete="new-password"
+      />
+    </label>
+    <label>
+      Role
+      <select [(ngModel)]="role" name="role">
+        <option value="customer">Customer</option>
+        <option value="agent">Agent</option>
+      </select>
+    </label>
+
+    <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <button type="button" (click)="submit()" [disabled]="submitting">
+      {{ submitting ? 'Please wait…' : 'Register' }}
+    </button>
+    <p class="muted footer">
+      Already have an account?
+      <button type="button" class="link-btn" (click)="goLogin()">Log in</button>
+    </p>
+  </div>
+</div>

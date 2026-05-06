@@ -1,0 +1,23 @@
+<section class="card">
+  <h2>Notifications</h2>
+  <p class="muted">Messages saved when an agent notifies you about your tickets.</p>
+  <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="notice-list" *ngIf="items.length; else emptyState">
+    <article class="notice" *ngFor="let n of items">
+      <header>
+        <strong>{{ n.subject }}</strong>
+        <span class="muted">{{ n.createdAt | date : 'medium' }}</span>
+      </header>
+      <p>{{ n.message }}</p>
+      <footer class="muted">
+        <span *ngIf="n.fromAgent">From: {{ n.fromAgent }}</span>
+        <span *ngIf="n.ticketId">Ticket: {{ n.ticketId }}</span>
+      </footer>
+    </article>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="muted">No notifications yet.</p>
+  </ng-template>
+</section>
