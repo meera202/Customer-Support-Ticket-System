@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cst-databases
+data:
+  NODE_ENV: production
+  MONGO_AUTH_URI: mongodb://mongo:27017/cst_auth
+  MONGO_TICKET_URI: mongodb://mongo:27017/cst_ticket
+  MONGO_NOTIFICATION_URI: mongodb://mongo:27017/cst_notify
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cst-jwt
+type: Opaque
+stringData:
+  JWT_SECRET: kubernetes-demo-change-me-before-using

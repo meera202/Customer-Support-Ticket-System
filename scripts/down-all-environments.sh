@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+ROOT="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
 
-docker compose -p cst-dev -f docker-compose.dev.yml down
-docker compose -p cst-test -f docker-compose.test.yml down
-docker compose -p cst-prod -f docker-compose.prod.yml down
+for f in env/development.env env/testing.env env/staging.env env/production.env; do
+  bash "$ROOT/scripts/compose-env.sh" "$f" down
+done
 
-echo "All environments are stopped."
+echo "All environments are stopped: development, testing, staging, production."

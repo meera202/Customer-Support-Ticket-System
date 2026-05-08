@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: support-service
+  name: support-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support-service
+  template:
+    metadata:
+      labels:
+        app: support-service
+    spec:
+      containers:
+        - name: support-service
+          image: cst-support-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5002
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: cst-databases
+                  key: NODE_ENV
+            - name: PORT
+              value: "5002"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5002
+            initialDelaySeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: support-service
+  name: support-service
+spec:
+  selector:
+    app: support-service
+  ports:
+    - port: 5002
+      targetPort: 5002

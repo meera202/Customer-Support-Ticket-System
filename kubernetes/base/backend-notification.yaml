@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: notification-service
+  name: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: cst-notification-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5003
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: cst-databases
+                  key: NODE_ENV
+            - name: PORT
+              value: "5003"
+            - name: MONGODB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: cst-databases
+                  key: MONGO_NOTIFICATION_URI
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5003
+            initialDelaySeconds: 25
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: notification-service
+  name: notification-service
+spec:
+  selector:
+    app: notification-service
+  ports:
+    - port: 5003
+      targetPort: 5003

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cst-databases
+data:
+  NODE_ENV: production
+  MONGO_AUTH_URI: mongodb://mongo:27017/cst_auth_production
+  MONGO_TICKET_URI: mongodb://mongo:27017/cst_ticket_production
+  MONGO_NOTIFICATION_URI: mongodb://mongo:27017/cst_notify_production

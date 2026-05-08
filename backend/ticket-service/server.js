@@ -22,11 +22,13 @@ app.use(
 );
 app.use(express.json());
 
+app.get("/health", (_req, res) => res.status(200).send("ok"));
+
 // Routes
 app.use("/api/tickets", ticketRoutes);
 
 // MongoDB connection — listen only after DB is ready (avoid failed saves on cold start)
-const PORT = 5000;
+const PORT = Number(process.env.PORT) || 5000;
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/ticketDB";
 

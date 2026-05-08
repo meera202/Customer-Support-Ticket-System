@@ -1,107 +1,107 @@
-services:
-  test-mongo:
-    image: mongo:7
-    container_name: cst-test-mongo
-    restart: unless-stopped
-    ports:
-      - "27018:27017"
-    volumes:
-      - test_mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    networks:
-      - cst-test-net
+# services:
+#   test-mongo:
+#     image: mongo:7
+#     container_name: cst-test-mongo
+#     restart: unless-stopped
+#     ports:
+#       - "27018:27017"
+#     volumes:
+#       - test_mongo_data:/data/db
+#     healthcheck:
+#       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 10
+#     networks:
+#       - cst-test-net
 
-  test-auth-service:
-    build:
-      context: ./backend/auth-service
-    image: cst/auth-service:test
-    restart: unless-stopped
-    environment:
-      PORT: 5001
-      JWT_SECRET: cst-test-secret
-      MONGODB_URI: mongodb://test-mongo:27017/cstAuthTest
-    depends_on:
-      test-mongo:
-        condition: service_healthy
-    ports:
-      - "5101:5001"
-    networks:
-      cst-test-net:
-        aliases:
-          - auth-service
+#   test-auth-service:
+#     build:
+#       context: ./backend/auth-service
+#     image: cst/auth-service:test
+#     restart: unless-stopped
+#     environment:
+#       PORT: 5001
+#       JWT_SECRET: cst-test-secret
+#       MONGODB_URI: mongodb://test-mongo:27017/cstAuthTest
+#     depends_on:
+#       test-mongo:
+#         condition: service_healthy
+#     ports:
+#       - "5101:5001"
+#     networks:
+#       cst-test-net:
+#         aliases:
+#           - auth-service
 
-  test-ticket-service:
-    build:
-      context: ./backend/ticket-service
-    image: cst/ticket-service:test
-    restart: unless-stopped
-    environment:
-      PORT: 5000
-      JWT_SECRET: cst-test-secret
-      MONGODB_URI: mongodb://test-mongo:27017/ticketDBTest
-    depends_on:
-      test-mongo:
-        condition: service_healthy
-    ports:
-      - "5100:5000"
-    networks:
-      cst-test-net:
-        aliases:
-          - ticket-service
+#   test-ticket-service:
+#     build:
+#       context: ./backend/ticket-service
+#     image: cst/ticket-service:test
+#     restart: unless-stopped
+#     environment:
+#       PORT: 5000
+#       JWT_SECRET: cst-test-secret
+#       MONGODB_URI: mongodb://test-mongo:27017/ticketDBTest
+#     depends_on:
+#       test-mongo:
+#         condition: service_healthy
+#     ports:
+#       - "5100:5000"
+#     networks:
+#       cst-test-net:
+#         aliases:
+#           - ticket-service
 
-  test-support-service:
-    build:
-      context: ./backend/support-service
-    image: cst/support-service:test
-    restart: unless-stopped
-    environment:
-      PORT: 5002
-    ports:
-      - "5102:5002"
-    networks:
-      cst-test-net:
-        aliases:
-          - support-service
+#   test-support-service:
+#     build:
+#       context: ./backend/support-service
+#     image: cst/support-service:test
+#     restart: unless-stopped
+#     environment:
+#       PORT: 5002
+#     ports:
+#       - "5102:5002"
+#     networks:
+#       cst-test-net:
+#         aliases:
+#           - support-service
 
-  test-notification-service:
-    build:
-      context: ./backend/notification-service
-    image: cst/notification-service:test
-    restart: unless-stopped
-    environment:
-      PORT: 5003
-      MONGODB_URI: mongodb://test-mongo:27017/cstNotificationsTest
-    depends_on:
-      test-mongo:
-        condition: service_healthy
-    ports:
-      - "5103:5003"
-    networks:
-      cst-test-net:
-        aliases:
-          - notification-service
+#   test-notification-service:
+#     build:
+#       context: ./backend/notification-service
+#     image: cst/notification-service:test
+#     restart: unless-stopped
+#     environment:
+#       PORT: 5003
+#       MONGODB_URI: mongodb://test-mongo:27017/cstNotificationsTest
+#     depends_on:
+#       test-mongo:
+#         condition: service_healthy
+#     ports:
+#       - "5103:5003"
+#     networks:
+#       cst-test-net:
+#         aliases:
+#           - notification-service
 
-  test-frontend:
-    build:
-      context: ./frontend
-    image: cst/frontend:test
-    restart: unless-stopped
-    depends_on:
-      - test-auth-service
-      - test-ticket-service
-      - test-support-service
-      - test-notification-service
-    ports:
-      - "8081:80"
-    networks:
-      - cst-test-net
+#   test-frontend:
+#     build:
+#       context: ./frontend
+#     image: cst/frontend:test
+#     restart: unless-stopped
+#     depends_on:
+#       - test-auth-service
+#       - test-ticket-service
+#       - test-support-service
+#       - test-notification-service
+#     ports:
+#       - "8081:80"
+#     networks:
+#       - cst-test-net
 
-volumes:
-  test_mongo_data:
+# volumes:
+#   test_mongo_data:
 
-networks:
-  cst-test-net:
+# networks:
+#   cst-test-net:

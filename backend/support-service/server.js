@@ -5,6 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/health', (_req, res) => res.status(200).send('ok'));
+
 app.post('/assign', (req, res) => {
   console.log('Ticket assigned:', req.body);
   res.json({ message: 'Assigned' });

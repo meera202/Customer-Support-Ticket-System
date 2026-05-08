@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cst-databases
+data:
+  NODE_ENV: test
+  MONGO_AUTH_URI: mongodb://mongo:27017/cst_auth_testing
+  MONGO_TICKET_URI: mongodb://mongo:27017/cst_ticket_testing
+  MONGO_NOTIFICATION_URI: mongodb://mongo:27017/cst_notify_testing
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
